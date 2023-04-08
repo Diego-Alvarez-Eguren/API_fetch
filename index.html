@@ -1,43 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     
   </head>
   <body>
-    <h1>Torre API Test</h1>
-    <form id="skill-form">
-      <label for="username-input">Enter a Torre.co username:</label>
+    <h1>Torre.bio API</h1>
+    <form id="bio-form">
+      <label for="username-input">Enter a Torre username:</label>
       <input type="text" id="username-input" name="username" />
-      <button type="submit">Get user's skills</button>
+      <button type="submit">Get user's bio</button>
     </form>
-    <div id="skill-container"></div>
+    <div id="bio-container"></div>
     <script>
-      const form = document.getElementById("skill-form");
+      const form = document.getElementById("bio-form");
       const usernameInput = document.getElementById("username-input");
-      const skillContainer = document.getElementById("skill-container");
+      const bioContainer = document.getElementById("bio-container");
 
       form.addEventListener("submit", event => {
         event.preventDefault();
 
         const username = usernameInput.value;
-        const apiUrl = `https://bio.torre.co/api/people/${username}/strengths`;
+        const apiUrl = `https://torre.bio/api/bios/${username}`;
 
         fetch(apiUrl)
           .then(response => response.json())
           .then(data => {
-            
-            const skillsHtml = `
-              <h2>Skills for ${data.person.name}</h2>
-              <ul>
-                ${data.strengths.map(skill => `<li>${skill.name}</li>`).join("")}
-              </ul>
+            // Create HTML elements to display the user's bio
+            const bioHtml = `
+              <h2>${data.person.name}</h2>
+              <p>${data.person.professionalHeadline}</p>
+              <p>${data.person.location.name}</p>
             `;
-            skillContainer.innerHTML = skillsHtml;
+            bioContainer.innerHTML = bioHtml;
           })
           .catch(error => {
             console.error(error);
-            skillContainer.innerHTML = "<p>There was an error retrieving the user's skills.</p>";
+            bioContainer.innerHTML = "<p>There was an error retrieving the user's bio.</p>";
           });
       });
     </script>
