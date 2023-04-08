@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    
+  </head>
+  <body>
+    <h1>Torre API Test</h1>
+    <form id="skill-form">
+      <label for="username-input">Enter a Torre.co username:</label>
+      <input type="text" id="username-input" name="username" />
+      <button type="submit">Get user's skills</button>
+    </form>
+    <div id="skill-container"></div>
+    <script>
+      const form = document.getElementById("skill-form");
+      const usernameInput = document.getElementById("username-input");
+      const skillContainer = document.getElementById("skill-container");
+
+      form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        const username = usernameInput.value;
+        const apiUrl = `https://bio.torre.co/api/people/${username}/strengths`;
+
+        fetch(apiUrl)
+          .then(response => response.json())
+          .then(data => {
+            
+            const skillsHtml = `
+              <h2>Skills for ${data.person.name}</h2>
+              <ul>
+                ${data.strengths.map(skill => `<li>${skill.name}</li>`).join("")}
+              </ul>
+            `;
+            skillContainer.innerHTML = skillsHtml;
+          })
+          .catch(error => {
+            console.error(error);
+            skillContainer.innerHTML = "<p>There was an error retrieving the user's skills.</p>";
+          });
+      });
+    </script>
+  </body>
+</html>
